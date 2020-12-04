@@ -1,5 +1,55 @@
 var app = angular.module("jcu", ['ngRoute']);
-app.config(function ($routeProvider) {
+
+app.factory('httpInterceptor', function ($q, $rootScope, $location, $timeout, $window, notifications) {
+    return {
+        request: function (config) {
+            config.headers = config.headers || {};
+
+            if ($rootScope.access_token) {
+                config.headers.Authorization = $rootScope.access_token;
+                return config;
+            } else if ($window.localStorage.token) {
+                var tokenvalue = JSON.parse($window.localStorage.getItem("token"));
+                config.headers.Authorization = tokenvalue.access_token;
+                return config;
+            } else {
+                return $timeout(function () {
+                    config.headers.Authorization = $rootScope.access_token;
+                    return config;
+                });
+            }
+            //return config;
+        },
+        response: function (response) {
+            if (response.data !== undefined) {
+                if (response.data.status) {
+                    //alert(response.data[0].status);
+                    if (response.data.message == "session_invalid") {
+                        // notifications.showWarning(response.data[0].status);
+                        console.log($location.path(), "siasdass", $location.path() != "/login");
+                        var pat=$location.path() 
+                        console.log(pat)
+                        if (pat != "/login" && pat != "/signup" ) {
+                            $location.path('/signout');
+                        }
+                        return $q.reject(response);
+                    } else if (response.data.status == "error") {
+                        // $location.path('/login');
+                        return $q.reject(response);
+                    } else {
+                        return response || $q.when(response);
+                    }
+                }
+            }
+            return response;
+        }
+    };
+})
+.config(['$routeProvider', '$httpProvider', '$locationProvider', function ($routeProvider, $httpProvider, $locationProvider) {
+
+    $httpProvider.defaults.headers.common['Accept'] = 'application/json, text/plain';
+    $httpProvider.interceptors.push('httpInterceptor');
+// app.config(function ($routeProvider) {
     $routeProvider
         .when('/home', {
             templateUrl: 'pages/home.html',
@@ -16,7 +66,8 @@ app.config(function ($routeProvider) {
         .otherwise({
             redirectTo: '/home'
         });
-});
+        $locationProvider.html5Mode(true);
+}]);
 
 
 
