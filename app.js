@@ -80,6 +80,15 @@ app.controller('home', function ($scope, $http) {
         }
     })
 
+    $scope.demo = function () {
+        $http.get("https://sandboxapi.multimedia5.com/api/v1/videos/produced?docsperpage=12&page=1")
+            .then(function (response) {
+                console.log(response)
+            })
+    }
+
+    $scope.demo()
+
 });
 
 app.controller('search', ['$scope', '$http', '$routeParams', function ($scope, $http, $routeParams) {
