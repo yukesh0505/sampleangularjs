@@ -1,0 +1,53 @@
+
+
+
+    <div class="section-2">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-1 col-xs-3">
+                        <img src="img/logo.jpeg" class="img-responsive">
+                    </div>
+                    <div class="col-md-11 col-xs-9">
+                        <div id="form-wrapper">
+                            <button class="go-button btn-primary" onclick="getSearchList()">Go</button>
+                            <span class="nav-list hidden-xs">
+                                <span class="current-selection">
+                                </span>
+                                <span class="arrow"></span>
+                                <select id="dropdown">
+                                    <option value="books-and-ebooks">Books & eBooks</option>
+                                    <option value="audiobooks">Audiobooks</option>
+                                    <option value="dvds">DVDs</option>
+                                    <option value="other-resources">Other Resources</option>
+                                    <option value="random">Random</option>
+                                </select>
+                            </span>
+                            <div class="in-wrap">
+                                <input type="text" name="q" id="search-box" ng-model="searchtext" placeholder="Search">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 menuP">
+                    <div class="menu-list" ng-repeat="app in list | filter:searchtext">
+                        <h4 class="title"><a href="{{app.link}}">{{app.hotelname}}</a></h4>
+                        <p>{{app.desc}}</p>
+                        <p>Location : {{app.location}}</p>
+                        <p>Suggested by {{app.suggestedby}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
