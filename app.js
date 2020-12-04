@@ -1,6 +1,7 @@
 var app = angular.module("jcu", ['ngRoute']);
-
-app.factory('httpInterceptor', function ($q, $rootScope, $location, $timeout, $window, notifications) {
+app.constant('config', {});
+app
+.factory('httpInterceptor', function ($q, $rootScope, $location, $timeout, $window) {
     return {
         request: function (config) {
             config.headers = config.headers || {};
